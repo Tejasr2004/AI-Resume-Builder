@@ -1,0 +1,687 @@
+/* 
+   KodNest Premium Build System — Project 3: AI Resume Builder
+   Design Philosophy: Calm, Intentional, Coherent, Confident
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap');
+
+:root {
+    /* Color System */
+    --color-bg: #F7F6F3;
+    --color-text: #111111;
+    --color-accent: #8B0000;
+    --color-accent-hover: #660000;
+    --color-success: #4A6E46;
+    --color-warning: #B48B3E;
+    --color-border: #E0E0E0;
+    --color-white: #FFFFFF;
+    --color-muted: #666666;
+    --color-light-bg: #F0EFED;
+
+    /* Spacing System */
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 40px;
+    --space-5: 64px;
+
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Transition */
+    --transition-standard: all 150ms ease-in-out;
+}
+
+/* Global Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--space-2);
+}
+
+p {
+    max-width: 720px;
+    margin-bottom: var(--space-2);
+}
+
+/* ─── Top Bar ─── */
+.kn-top-bar {
+    height: 60px;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-4);
+    background-color: var(--color-bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-shrink: 0;
+}
+
+.kn-top-bar .project-name {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.kn-top-bar .progress-indicator {
+    font-family: var(--font-heading);
+    font-style: italic;
+    color: var(--color-muted);
+    font-size: 14px;
+}
+
+/* ─── Status Badge ─── */
+.kn-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.kn-badge-not-started {
+    background-color: #ECECEC;
+    color: #666;
+}
+
+.kn-badge-in-progress {
+    background-color: #FFFBE6;
+    color: #B7791F;
+    border: 1px solid #B7791F;
+}
+
+.kn-badge-shipped {
+    background-color: #E6FFFA;
+    color: #006D5B;
+    border: 1px solid #006D5B;
+}
+
+/* ─── Navigation ─── */
+.kn-navbar {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    padding: 0 var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-white);
+    height: 48px;
+    overflow-x: auto;
+    flex-shrink: 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.kn-navbar::-webkit-scrollbar {
+    display: none;
+}
+
+.kn-nav-link {
+    text-decoration: none;
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 12px 0;
+    border-bottom: 2px solid transparent;
+    transition: var(--transition-standard);
+    opacity: 0.6;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.kn-nav-link:hover {
+    opacity: 1;
+}
+
+.kn-nav-link.active {
+    opacity: 1;
+    border-bottom-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.kn-nav-link.locked {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.kn-nav-link .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--color-border);
+    color: var(--color-muted);
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 6px;
+}
+
+.kn-nav-link.active .step-num {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+}
+
+.kn-nav-link.completed .step-num {
+    background-color: var(--color-success);
+    color: var(--color-white);
+}
+
+/* ─── Context Header ─── */
+.kn-context-header {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-white);
+    flex-shrink: 0;
+}
+
+.kn-context-header h1 {
+    font-size: 28px;
+    margin-bottom: 4px;
+}
+
+.kn-context-header .subtext {
+    font-size: 15px;
+    color: #555;
+    max-width: 600px;
+    margin-bottom: 0;
+}
+
+/* ─── Main Layout: Workspace + Build Panel ─── */
+.kn-main-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.kn-workspace {
+    flex: 7;
+    background-color: var(--color-white);
+    border-right: 1px solid var(--color-border);
+    padding: var(--space-4);
+    overflow-y: auto;
+}
+
+.kn-build-panel {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-light-bg);
+    padding: var(--space-3);
+    overflow-y: auto;
+    min-width: 320px;
+}
+
+/* ─── Workspace Content ─── */
+.step-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: var(--space-1);
+}
+
+.step-subtitle {
+    font-size: 15px;
+    color: var(--color-muted);
+    margin-bottom: var(--space-3);
+}
+
+.step-instruction {
+    background-color: var(--color-light-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: var(--space-3);
+    margin-bottom: var(--space-3);
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+.step-instruction h3 {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-muted);
+    margin-bottom: var(--space-1);
+}
+
+/* ─── Artifact Upload Area ─── */
+.artifact-area {
+    border: 2px dashed var(--color-border);
+    border-radius: 6px;
+    padding: var(--space-4);
+    text-align: center;
+    transition: var(--transition-standard);
+    cursor: pointer;
+    margin-bottom: var(--space-3);
+}
+
+.artifact-area:hover {
+    border-color: var(--color-accent);
+    background-color: rgba(139, 0, 0, 0.02);
+}
+
+.artifact-area.uploaded {
+    border-color: var(--color-success);
+    border-style: solid;
+    background-color: rgba(74, 110, 70, 0.04);
+}
+
+.artifact-area .icon {
+    font-size: 32px;
+    margin-bottom: var(--space-1);
+    color: var(--color-muted);
+}
+
+.artifact-area.uploaded .icon {
+    color: var(--color-success);
+}
+
+.artifact-area .label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: 4px;
+}
+
+.artifact-area .hint {
+    font-size: 12px;
+    color: var(--color-muted);
+}
+
+.artifact-area.uploaded .label {
+    color: var(--color-success);
+}
+
+/* ─── Step Navigation Buttons ─── */
+.step-nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+}
+
+/* ─── Buttons ─── */
+.kn-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition-standard);
+    text-decoration: none;
+    border: 1px solid transparent;
+    gap: 8px;
+}
+
+.kn-btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+}
+
+.kn-btn-primary:hover {
+    background-color: var(--color-accent-hover);
+}
+
+.kn-btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.kn-btn-primary:disabled:hover {
+    background-color: var(--color-accent);
+}
+
+.kn-btn-secondary {
+    background-color: transparent;
+    border-color: var(--color-text);
+    color: var(--color-text);
+}
+
+.kn-btn-secondary:hover {
+    background-color: rgba(17, 17, 17, 0.05);
+}
+
+.kn-btn-success {
+    background-color: var(--color-success);
+    color: var(--color-white);
+    border-color: var(--color-success);
+}
+
+.kn-btn-success:hover {
+    background-color: #3d5e3a;
+}
+
+.kn-btn-error {
+    background-color: #C0392B;
+    color: var(--color-white);
+    border-color: #C0392B;
+}
+
+.kn-btn-error:hover {
+    background-color: #A93226;
+}
+
+.kn-btn-sm {
+    padding: 8px 16px;
+    font-size: 12px;
+}
+
+/* ─── Build Panel Components ─── */
+.panel-section {
+    margin-bottom: var(--space-3);
+}
+
+.panel-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--color-muted);
+    margin-bottom: var(--space-1);
+}
+
+.panel-textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    color: #333;
+    background-color: var(--color-white);
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.panel-textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.panel-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.panel-actions .kn-btn {
+    width: 100%;
+    justify-content: center;
+}
+
+.panel-divider {
+    height: 1px;
+    background-color: var(--color-border);
+    margin: var(--space-2) 0;
+}
+
+.feedback-group {
+    display: flex;
+    gap: var(--space-1);
+}
+
+.feedback-group .kn-btn {
+    flex: 1;
+    font-size: 12px;
+    padding: 10px 8px;
+}
+
+.feedback-group .kn-btn.selected {
+    outline: 2px solid var(--color-text);
+    outline-offset: 1px;
+}
+
+/* ─── Proof Footer ─── */
+.kn-proof-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-white);
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-1) var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 200;
+    height: 44px;
+    flex-shrink: 0;
+}
+
+.kn-proof-footer .step-indicators {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.step-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--color-border);
+    transition: var(--transition-standard);
+}
+
+.step-dot.completed {
+    background-color: var(--color-success);
+}
+
+.step-dot.current {
+    background-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.15);
+}
+
+.kn-proof-footer .footer-text {
+    font-size: 12px;
+    color: var(--color-muted);
+}
+
+/* ─── Proof Page ─── */
+.proof-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.proof-card {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+.proof-card-title {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-muted);
+    margin-bottom: var(--space-2);
+}
+
+.proof-step-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.proof-step-row:last-child {
+    border-bottom: none;
+}
+
+.proof-step-row .step-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+}
+
+.proof-step-row .status-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.status-icon.done {
+    background-color: var(--color-success);
+    color: var(--color-white);
+}
+
+.status-icon.pending {
+    background-color: var(--color-border);
+    color: var(--color-muted);
+}
+
+.proof-input-group {
+    margin-bottom: var(--space-2);
+}
+
+.proof-input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.proof-input-group label .required {
+    color: var(--color-accent);
+}
+
+.proof-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 13px;
+    background-color: var(--color-white);
+    color: var(--color-text);
+    transition: var(--transition-standard);
+}
+
+.proof-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.proof-input.valid {
+    border-color: var(--color-success);
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #CCC;
+    border-radius: 4px;
+}
+
+/* ─── Mobile Responsive ─── */
+@media (max-width: 900px) {
+    .kn-main-wrapper {
+        flex-direction: column;
+    }
+
+    .kn-workspace {
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .kn-build-panel {
+        min-width: unset;
+    }
+}
+
+/* ─── Toast ─── */
+.kn-toast {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background-color: var(--color-text);
+    color: var(--color-white);
+    padding: 10px 24px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+}
+
+.kn-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ─── Empty State ─── */
+.kn-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-5);
+    text-align: center;
+}
+
+.kn-empty-state .icon {
+    font-size: 48px;
+    margin-bottom: var(--space-2);
+    opacity: 0.4;
+}
+
+/* Body padding for fixed footer */
+body {
+    padding-bottom: 44px;
+}
